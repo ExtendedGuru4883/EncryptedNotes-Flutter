@@ -48,7 +48,12 @@ Encryption and security logic follow a **Zero-Knowledge Security Model**, meanin
    flutter pub get
    ```
 
-4. **Run the app:**
+4. **Run the code generator:**
+   ```sh
+   dart run build_runner build -d
+   ```
+
+5. **Run the app:**
    ```sh
    flutter run
    ```
@@ -65,3 +70,4 @@ Do not use it to store or transmit sensitive data.
 ## License
 
 See [LICENSE](LICENSE) for details.
+
