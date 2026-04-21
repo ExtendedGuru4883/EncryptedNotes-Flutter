@@ -33,7 +33,7 @@ Encryption and security logic follow a **Zero-Knowledge Security Model**, meanin
 1. **Clone the repository:**
    ```sh
    git clone https://github.com/ExtendedGuru4883/EncryptedNotes-Flutter.git
-   cd ITS-flutter
+   cd EncryptedNotes-Flutter
    ```
 
 2. **Create a `.env` file in the root folder** with the following variable:
