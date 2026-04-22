@@ -3,6 +3,11 @@
 This is a Flutter-based frontend application designed to connect to the API provided by [EncryptedNotes](https://github.com/ExtendedGuru4883/EncryptedNotes). The app allows users to manage encrypted notes from a mobile or desktop interface.
 
 ---
+<div align='center'>
+   <img width="250" height="519" alt="demo" src="https://github.com/user-attachments/assets/4ac7a0a1-5e08-4ff7-9536-93c6b209f3d1" />
+</div>
+
+---
 
 ## Purpose
 
