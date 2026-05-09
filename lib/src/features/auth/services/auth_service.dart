@@ -17,9 +17,8 @@ class AuthService {
   //-- LOGIN --
 
   Future<(String authToken, SecureKey encryptionKey)> loginAsync(
-    String username,
-    Int8List passwordBytes,
-  ) async {
+      String username,
+      Int8List passwordBytes,) async {
     final challenge = await _httpService.getJson<ChallengeResponse>(
       path: '/auth/Challenge',
       fromJsonT: (j) => ChallengeResponse.fromJson(j),
@@ -37,12 +36,21 @@ class AuthService {
       fromJsonT: (j) => LoginResponse.fromJson(j),
     );
 
-    final encryptionKey = await _cryptoService.deriveEncryptionKey(
+    final keyEncryptionKey = await _cryptoService.deriveEncryptionKey(
       passwordBytes,
       base64Decode(loginResponse.encryptionSaltBase64),
     );
-
-    return (loginResponse.token, encryptionKey);
+    final masterEncryptionKeyBytes = await _cryptoService.decrypt(
+        base64Decode(loginResponse.encryptedEncryptionKeyBase64),
+        keyEncryptionKey);
+    final masterEncryptionKey = _cryptoService.secureKeyFromBytes(
+        masterEncryptionKeyBytes);
+    try {
+      return (loginResponse.token, masterEncryptionKey);
+    } finally {
+      keyEncryptionKey.dispose();
+      masterEncryptionKeyBytes.fillRange(0, masterEncryptionKeyBytes.length, 0);
+    }
   }
 
   Future<Map<String, dynamic>> _generateLoginRequestData(
@@ -105,11 +113,21 @@ class AuthService {
     final publicKeyBytes = keyPair.publicKey;
     keyPair.dispose();
 
+    final keyEncryptionKey = await _cryptoService.deriveEncryptionKey(passwordBytes, encryptionSaltBytes);
+    final masterEncryptionKey = await _cryptoService.generateRandomEncryptionKey();
+    final masterEncryptionKeyBytes = masterEncryptionKey.extractBytes();
+
+    final encryptedEncryptionKeyBytes = await _cryptoService.encrypt(masterEncryptionKeyBytes, keyEncryptionKey);
+    masterEncryptionKey.dispose();
+    keyEncryptionKey.dispose();
+    masterEncryptionKeyBytes.fillRange(0, masterEncryptionKeyBytes.length, 0);
+
     return SignupRequest(
       username,
       base64Encode(signatureSaltBytes),
       base64Encode(encryptionSaltBytes),
       base64Encode(publicKeyBytes),
+      base64Encode(encryptedEncryptionKeyBytes)
     ).toJson();
   }
 

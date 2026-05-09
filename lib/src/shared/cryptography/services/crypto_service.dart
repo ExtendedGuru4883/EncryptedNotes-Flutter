@@ -35,6 +35,9 @@ class CryptoService {
         case 'deriveEncryptionKey':
           sendPort.send(_deriveEncryptionKey(args[0], args[1], sodium));
           break;
+        case 'generateRandomEncryptionKey':
+          sendPort.send(_generateRandomEncryptionKey(sodium));
+          break;
         case 'decrypt':
           sendPort.send(_decrypt(args[0], args[1], sodium));
           break;
@@ -55,6 +58,10 @@ class CryptoService {
     return _sodium.randombytes.buf(_sodium.crypto.pwhash.saltBytes);
   }
 
+  SecureKey secureKeyFromBytes(Uint8List bytes) {
+    return SecureKey.fromList(_sodium, bytes);
+  }
+
   Future<SecureKey> deriveEncryptionKey(
     Int8List passwordBytes,
     Uint8List saltBytes,
@@ -62,6 +69,13 @@ class CryptoService {
     final transferrableSecureKey =
         await _sendCommand('deriveEncryptionKey', [passwordBytes, saltBytes])
             as TransferrableSecureKey;
+    return _sodium.materializeTransferrableSecureKey(transferrableSecureKey);
+  }
+
+  Future<SecureKey> generateRandomEncryptionKey() async {
+    final transferrableSecureKey =
+    await _sendCommand(
+        'generateRandomEncryptionKey', []) as TransferrableSecureKey;
     return _sodium.materializeTransferrableSecureKey(transferrableSecureKey);
   }
 
@@ -121,6 +135,18 @@ class CryptoService {
       memLimit: sodium.crypto.pwhash.memLimitModerate,
       alg: CryptoPwhashAlgorithm.argon2id13,
     );
+
+    final transferrableSecureKey = sodium.createTransferrableSecureKey(
+      secureKey,
+    );
+    secureKey.dispose();
+    return transferrableSecureKey;
+  }
+
+  static TransferrableSecureKey _generateRandomEncryptionKey(
+      SodiumSumo sodium,
+      ) {
+    final secureKey = sodium.crypto.secretBox.keygen();
 
     final transferrableSecureKey = sodium.createTransferrableSecureKey(
       secureKey,
