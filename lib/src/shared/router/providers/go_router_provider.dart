@@ -17,7 +17,7 @@ part 'go_router_provider.g.dart';
 GoRouter goRouter(Ref ref) {
   final authStateNotifier = ValueNotifier(false);
 
-  ref.listen(authNotifierProvider, (previous, next) {
+  ref.listen(authProvider, (previous, next) {
     next.whenOrNull(
       data: (authState) {
         authStateNotifier.value = authState is Authenticated;

@@ -18,7 +18,7 @@ class _AddNoteScreenState extends ConsumerState<AddNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final notesStateAsync = ref.watch(notesNotifierProvider);
+    final notesStateAsync = ref.watch(notesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -99,7 +99,7 @@ class _AddNoteScreenState extends ConsumerState<AddNoteScreen> {
     if (!_formKey.currentState!.validate()) return;
     try {
       await ref
-          .read(notesNotifierProvider.notifier)
+          .read(notesProvider.notifier)
           .addNote(_titleTextController.text, _contentTextController.text);
       if (mounted) {
         context.pop();

@@ -27,7 +27,7 @@ class _UpdateNoteScreenState extends ConsumerState<UpdateNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final notesStateAsync = ref.watch(notesNotifierProvider);
+    final notesStateAsync = ref.watch(notesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -127,7 +127,7 @@ class _UpdateNoteScreenState extends ConsumerState<UpdateNoteScreen> {
     if (!_formKey.currentState!.validate()) return;
     try {
       await ref
-          .read(notesNotifierProvider.notifier)
+          .read(notesProvider.notifier)
           .updateNote(
             widget.note,
             _titleTextController.text,
@@ -148,7 +148,7 @@ class _UpdateNoteScreenState extends ConsumerState<UpdateNoteScreen> {
 
   Future<void> _handleDelete(NoteModel note) async {
     try {
-      await ref.read(notesNotifierProvider.notifier).deleteNote(note);
+      await ref.read(notesProvider.notifier).deleteNote(note);
       if (mounted) {
         context.pop();
       }

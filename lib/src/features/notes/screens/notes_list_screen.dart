@@ -18,7 +18,7 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final notesStateAsync = ref.watch(notesNotifierProvider);
+    final notesStateAsync = ref.watch(notesProvider);
     final currentList = notesStateAsync.value?.notesList;
 
     _scrollController.addListener(() async {
@@ -80,7 +80,7 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
 
   Future<void> _handleFetch() async {
     try {
-      await ref.read(notesNotifierProvider.notifier).getNotes(_pageSize);
+      await ref.read(notesProvider.notifier).getNotes(_pageSize);
     } catch (ex) {
       if (mounted && ex is! UnauthorizedException) {
         ScaffoldMessenger.of(

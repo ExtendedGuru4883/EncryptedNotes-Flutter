@@ -23,7 +23,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   void initState() {
-    final authStateAsync = ref.read(authNotifierProvider);
+    final authStateAsync = ref.read(authProvider);
     authStateAsync.whenOrNull(
       data: (authState) {
         if (authState case Authenticated(:final username)) {
@@ -36,7 +36,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final settingsAsync = ref.watch(settingsNotifierProvider);
+    final settingsAsync = ref.watch(settingsProvider);
 
     return settingsAsync.when(
       loading: () =>
@@ -79,21 +79,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     label: Text('Dark'),
                     selected: settings.themeMode == ThemeMode.dark,
                     onSelected: (_) => ref
-                        .read(settingsNotifierProvider.notifier)
+                        .read(settingsProvider.notifier)
                         .setThemeMode(ThemeMode.dark),
                   ),
                   ChoiceChip(
                     label: Text('Light'),
                     selected: settings.themeMode == ThemeMode.light,
                     onSelected: (_) => ref
-                        .read(settingsNotifierProvider.notifier)
+                        .read(settingsProvider.notifier)
                         .setThemeMode(ThemeMode.light),
                   ),
                   ChoiceChip(
                     label: Text('System'),
                     selected: settings.themeMode == ThemeMode.system,
                     onSelected: (_) => ref
-                        .read(settingsNotifierProvider.notifier)
+                        .read(settingsProvider.notifier)
                         .setThemeMode(ThemeMode.system),
                   ),
                 ],
@@ -106,7 +106,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   BlockPicker(
                     pickerColor: settings.colorSchemeSeed,
                     onColorChanged: ref
-                        .read(settingsNotifierProvider.notifier)
+                        .read(settingsProvider.notifier)
                         .setColorSchemeSeed,
                     layoutBuilder: (context, colors, child) => Expanded(
                       child: SingleChildScrollView(
@@ -168,7 +168,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () => ref
-                        .read(authNotifierProvider.notifier)
+                        .read(authProvider.notifier)
                         .logout(message: "Logged out"),
 
                     child: Text('Log out'),
@@ -201,7 +201,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void _deleteUser() async {
     if (_secondsBeforeResetDelete > 0) {
       try {
-        await ref.read(authNotifierProvider.notifier).deleteUser();
+        await ref.read(authProvider.notifier).deleteUser();
       } catch (ex) {
         if (mounted) {
           ScaffoldMessenger.of(

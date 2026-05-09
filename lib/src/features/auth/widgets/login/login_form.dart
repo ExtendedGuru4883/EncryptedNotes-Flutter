@@ -20,7 +20,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authNotifierProvider);
+    final authState = ref.watch(authProvider);
 
     return Form(
       key: _formKey,
@@ -88,7 +88,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
     try {
       await ref
-          .read(authNotifierProvider.notifier)
+          .read(authProvider.notifier)
           .login(_usernameTextController.text, passwordBytes);
     } catch (ex) {
       if (mounted) {

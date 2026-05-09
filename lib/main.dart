@@ -30,7 +30,7 @@ class _MainAppState extends ConsumerState<MainApp> {
   @override
   Widget build(BuildContext context) {
     final router = ref.read(goRouterProvider);
-    final settingsAsync = ref.watch(settingsNotifierProvider);
+    final settingsAsync = ref.watch(settingsProvider);
 
     return MaterialApp.router(
       routerConfig: router,
@@ -52,8 +52,8 @@ class _MainAppState extends ConsumerState<MainApp> {
 
   Future<void> _initializeAndRemoveSplash() async {
     await dotenv.load(fileName: ".env");
-    await ref.read(authNotifierProvider.future);
-    await ref.read(settingsNotifierProvider.future);
+    await ref.read(authProvider.future);
+    await ref.read(settingsProvider.future);
     FlutterNativeSplash.remove();
   }
 }

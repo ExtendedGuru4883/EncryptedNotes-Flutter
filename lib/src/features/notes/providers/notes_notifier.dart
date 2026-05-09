@@ -49,7 +49,7 @@ class NotesNotifier extends _$NotesNotifier {
       }
     } on UnauthorizedException {
       if (!ref.mounted) return;
-      ref.read(authNotifierProvider.notifier).logout();
+      ref.read(authProvider.notifier).logout();
       rethrow;
     } catch (ex) {
       if (!ref.mounted) return;
@@ -83,7 +83,7 @@ class NotesNotifier extends _$NotesNotifier {
       }
     } on UnauthorizedException catch (ex) {
       if (!ref.mounted) return;
-      ref.read(authNotifierProvider.notifier).logout();
+      ref.read(authProvider.notifier).logout();
       state = AsyncValue.error(ex, StackTrace.current);
       rethrow;
     } catch (ex) {
@@ -125,7 +125,7 @@ class NotesNotifier extends _$NotesNotifier {
       }
     } on UnauthorizedException catch (ex) {
       if (!ref.mounted) return;
-      ref.read(authNotifierProvider.notifier).logout();
+      ref.read(authProvider.notifier).logout();
       state = AsyncValue.error(ex, StackTrace.current);
       rethrow;
     } catch (ex) {
@@ -163,7 +163,7 @@ class NotesNotifier extends _$NotesNotifier {
       }
     } on UnauthorizedException {
       if (!ref.mounted) return;
-      ref.read(authNotifierProvider.notifier).logout();
+      ref.read(authProvider.notifier).logout();
       rethrow;
     } catch (ex) {
       if (!ref.mounted) return;
@@ -178,7 +178,7 @@ class NotesNotifier extends _$NotesNotifier {
   }
 
   Authenticated _getCredentialsOrThrow() {
-    final authState = ref.read(authNotifierProvider).unwrapPrevious().value;
+    final authState = ref.read(authProvider).unwrapPrevious().value;
     switch (authState) {
       case Authenticated():
         return authState;
@@ -207,7 +207,7 @@ class NotesNotifier extends _$NotesNotifier {
       return paginatedNotesResponse.items;
     } on UnauthorizedException {
       if (!ref.mounted) return [];
-      ref.read(authNotifierProvider.notifier).logout();
+      ref.read(authProvider.notifier).logout();
       rethrow;
     } catch (ex) {
       if (!ref.mounted) return [];

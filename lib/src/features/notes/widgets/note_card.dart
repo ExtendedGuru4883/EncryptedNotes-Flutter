@@ -11,7 +11,7 @@ class NoteCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notesStateAsync = ref.watch(notesNotifierProvider);
+    final notesStateAsync = ref.watch(notesProvider);
 
     return GestureDetector(
       onTap: () => notesStateAsync.value?.awaitingDeletionNoteId == note.id
